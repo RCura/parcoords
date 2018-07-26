@@ -5,10 +5,11 @@
 \title{htmlwidget for d3.js parallel-coordinates}
 \usage{
 parcoords(data = NULL, rownames = T, color = NULL, brushMode = NULL,
-  brushPredicate = "and", alphaOnBrushed = NULL, reorderable = F,
-  axisDots = NULL, margin = NULL, composite = NULL, alpha = NULL,
-  queue = F, mode = F, rate = NULL, dimensions = NULL, tasks = NULL,
-  autoresize = FALSE, width = NULL, height = NULL, elementId = NULL)
+  dimensionTitleRotation = 0, brushPredicate = "and",
+  alphaOnBrushed = NULL, reorderable = F, axisDots = NULL,
+  margin = NULL, composite = NULL, alpha = NULL, queue = F, mode = F,
+  rate = NULL, dimensions = NULL, tasks = NULL, autoresize = FALSE,
+  width = NULL, height = NULL, elementId = NULL)
 }
 \arguments{
 \item{data}{data.frame with data to use in the chart}

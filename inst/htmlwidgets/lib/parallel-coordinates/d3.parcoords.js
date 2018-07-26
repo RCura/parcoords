@@ -1,3 +1,51 @@
+function wrap (text, width) {
+
+  text.each(function() {
+
+    var breakChars = ['/', '&', '-'],
+      text = d3.select(this),
+      textContent = text.text(),
+      spanContent;
+
+    breakChars.forEach(char => {
+      // Add a space after each break char for the function to use to determine line breaks
+      textContent = textContent.replace(char, char + ' ');
+    });
+
+    var words = textContent.split(/\s+/).reverse(),
+      word,
+      line = [],
+      lineNumber = 0,
+      lineHeight = 1.1, // ems
+      x = text.attr('x'),
+      y = text.attr('y'),
+      dy = parseFloat(text.attr('dy') || 0),
+      tspan = text.text(null).append('tspan').attr('x', x).attr('y', y).attr('dy', dy + 'em');
+
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(' '));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        spanContent = line.join(' ');
+        breakChars.forEach(char => {
+          // Remove spaces trailing breakChars that were added above
+          spanContent = spanContent.replace(char + ' ', char);
+        });
+        tspan.text(spanContent);
+        line = [word];
+        tspan = text.append('tspan').attr('x', x).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
+      }
+    }
+  });
+
+}
+
+function type(d) {
+  d.value = +d.value;
+  return d;
+}
+
 d3.parcoords = function(config) {
   var __ = {
     data: [],
@@ -704,7 +752,7 @@ function flipAxisAndUpdatePCP(dimension) {
 
 function rotateLabels() {
   if (!__.rotateLabels) return;
-  
+
   var delta = d3.event.deltaY;
   delta = delta < 0 ? -5 : delta;
   delta = delta > 0 ? 5 : delta;
@@ -754,13 +802,15 @@ pc.createAxes = function() {
       .attr({
         "text-anchor": "middle",
         "y": 0,
+        "dy": -5,
         "transform": "translate(0,-5) rotate(" + __.dimensionTitleRotation + ")",
         "x": 0,
         "class": "label"
       })
       .text(dimensionLabels)
       .on("dblclick", flipAxisAndUpdatePCP)
-      .on("wheel", rotateLabels);
+      .on("wheel", rotateLabels)
+      .call(wrap, 5);
 
   if (__.nullValueSeparator=="top") {
     pc.svg.append("line")
@@ -826,13 +876,15 @@ pc.updateAxes = function(animationTime) {
       .attr({
         "text-anchor": "middle",
         "y": 0,
+        "dy": -5,
         "transform": "translate(0,-5) rotate(" + __.dimensionTitleRotation + ")",
         "x": 0,
         "class": "label"
       })
       .text(dimensionLabels)
       .on("dblclick", flipAxisAndUpdatePCP)
-      .on("wheel", rotateLabels);
+      .on("wheel", rotateLabels)
+      .call(wrap, 5);
 
   // Update
   g_data.attr("opacity", 0);
@@ -845,7 +897,8 @@ pc.updateAxes = function(animationTime) {
     .transition()
       .duration(animationTime)
       .text(dimensionLabels)
-      .attr("transform", "translate(0,-5) rotate(" + __.dimensionTitleRotation + ")");
+      .attr("transform", "translate(0,-5) rotate(" + __.dimensionTitleRotation + ")")
+      ;
 
   // Exit
   g_data.exit().remove();
@@ -1332,7 +1385,7 @@ pc.brushMode = function(mode) {
       .attr("stroke-width", 2);
 
     drag
-      .on("drag", function(d, i) { 
+      .on("drag", function(d, i) {
         var ev = d3.event;
         i = i + 1;
         strum["p" + i][0] = Math.min(Math.max(strum.minX + 1, ev.x), strum.maxX);
