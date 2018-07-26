@@ -802,7 +802,7 @@ pc.createAxes = function() {
       .attr({
         "text-anchor": "middle",
         "y": 0,
-        "dy": -5,
+        "dy": -3,
         "transform": "translate(0,-5) rotate(" + __.dimensionTitleRotation + ")",
         "x": 0,
         "class": "label"
@@ -876,7 +876,7 @@ pc.updateAxes = function(animationTime) {
       .attr({
         "text-anchor": "middle",
         "y": 0,
-        "dy": -5,
+        "dy": -3,
         "transform": "translate(0,-5) rotate(" + __.dimensionTitleRotation + ")",
         "x": 0,
         "class": "label"
