@@ -118,6 +118,7 @@ parcoords <- function(
   , rownames = T
   , color = NULL
   , brushMode = NULL
+  , dimensionTitleRotation = 0
   , brushPredicate = "and"
   , alphaOnBrushed = NULL
   , reorderable = F
@@ -215,6 +216,7 @@ parcoords <- function(
       , brushMode = brushMode
       , brushPredicate = brushPredicate
       , alphaOnBrushed = alphaOnBrushed
+      , dimensionTitleRotation = dimensionTitleRotation
       , reorderable = reorderable
       , axisDots = axisDots
       , margin = margin
